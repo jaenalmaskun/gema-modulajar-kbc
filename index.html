@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplikasi Perangkat Ajar Berbasis AI - Modul KBC MI</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Alpine.js CDN -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <style>
+    [x-cloak] { display: none !important; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Cetak Standard A4 */
+    @media print {
+      .no-print { display: none !important; }
+      .print-area { 
+        display: block !important; 
+        padding: 0 !important; 
+        margin: 0 !important; 
+        box-shadow: none !important;
+        border: none !important;
+        max-width: 100% !important;
+      }
+      body { 
+        background: white !important; 
+        font-family: 'Times New Roman', Times, serif !important; 
+        font-size: 11pt !important; 
+        color: black !important; 
+      }
+      .page-break { page-break-before: always; }
+      .border-print { border: 1px solid #000 !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen antialiased selection:bg-emerald-500 selection:text-white" x-data="appData()">
+
+  <!-- NAVBAR HEADER MOBILE OPTIMIZED (NO PRINT) -->
+  <header class="no-print sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white shadow-xl">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
+      
+      <!-- Brand Logo & Title -->
+      <div class="flex items-center justify-between w-full md:w-auto">
+        <div class="flex items-center space-x-3">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 text-slate-950 font-black">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 fill-slate-950 stroke-none" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="font-black text-sm sm:text-base tracking-tight bg-gradient-to-r from-white via-slate-100 to-emerald-300 bg-clip-text text-transparent">MODUL KBC AI</h1>
+              <span class="px-2 py-0.5 text-[9px] sm:text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full">KKG MI</span>
+            </div>
+            <p class="text-[10px] sm:text-[11px] text-slate-400">Kurikulum Berbasis Cinta • MI</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs (Optimized for Android / Mobile Horizontal Scroll) -->
+      <nav class="flex items-center overflow-x-auto no-scrollbar bg-slate-950/80 p-1.5 rounded-2xl border border-slate-800 shadow-inner gap-1 w-full md:w-auto">
+        <button @click="activeTab = 'form'" 
+                :class="activeTab === 'form' ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md font-bold' : 'text-slate-400 hover:text-slate-200 font-medium'" 
+                class="px-3 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+          Dashboard
+        </button>
+
+        <button @click="activeTab = 'materials'" 
+                :class="activeTab === 'materials' ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md font-bold' : 'text-slate-400 hover:text-slate-200 font-medium'" 
+                class="px-3 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          Bank Materi (<span x-text="materialBank.length"></span>)
+        </button>
+        
+        <button @click="activeTab = 'preview'" 
+                :class="activeTab === 'preview' ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md font-bold' : 'text-slate-400 hover:text-slate-200 font-medium'" 
+                class="px-3 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          Pratinjau
+        </button>
+
+        <button @click="activeTab = 'archive'" 
+                :class="activeTab === 'archive' ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md font-bold' : 'text-slate-400 hover:text-slate-200 font-medium'" 
+                class="px-3 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+          Arsip (<span x-text="archives.length"></span>)
+        </button>
+
+        <button @click="activeTab = 'settings'" 
+                :class="activeTab === 'settings' ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md font-bold' : 'text-slate-400 hover:text-slate-200 font-medium'" 
+                class="px-3 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+          Pengaturan
+        </button>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8">
+
+    <!-- ==================== TAB 1: DASHBOARD & FORM INPUT ==================== -->
+    <div x-show="activeTab === 'form'" x-cloak class="no-print space-y-8">
+      
+      <!-- HERO DASHBOARD BANNER -->
+      <div class="relative overflow-hidden rounded-3xl border border-emerald-800/40 bg-gradient-to-br from-slate-900 via-emerald-950 to-teal-950 p-6 md:p-8 text-white shadow-2xl">
+        <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+          <div class="space-y-2 max-w-2xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 border border-emerald-400/30 rounded-full text-xs font-semibold text-emerald-300">
+              <svg class="w-3.5 h-3.5 text-amber-300 fill-amber-300" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.2-6.3-4.6-6.3 4.6 2.3-7.2-6-4.6h7.6z"/></svg>
+              Aplikasi Perangkat Ajar Berbasis AI • Oleh Jaenal Maskun
+            </div>
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+              Modul Ajar <span class="text-emerald-400">Berbasis Cinta (KBC)</span>
+            </h2>
+            <p class="text-xs md:text-sm text-slate-300 leading-relaxed">
+              Pilih metode penyusunan modul di bawah ini untuk memulai pengisian perangkat pembelajaran secara otomatis dengan AI atau input manual mandiri.
+            </p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto text-xs">
+            <button @click="saveToArchive()" class="w-full sm:w-auto px-4 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition flex items-center justify-center gap-2 shadow-lg">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+              Simpan ke Arsip
+            </button>
+            <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 w-full sm:w-auto shadow-inner">
+              <span class="text-slate-400 text-[10px] uppercase font-bold tracking-wider block mb-1">Engine AI Aktif</span>
+              <div class="flex items-center gap-1.5 font-bold" :class="settings.apiKey ? 'text-emerald-400' : 'text-amber-400'">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+                <span x-text="settings.apiKey ? (settings.provider === 'gemini' ? 'Google Gemini Direct API' : 'OpenRouter API') : 'Key Belum Diisi'"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KARTU PILIHAN JENIS MODUL -->
+      <div x-show="!inputMode" class="space-y-4">
+        <div class="text-center max-w-xl mx-auto space-y-1">
+          <h3 class="text-lg font-bold text-slate-900">Pilih Metode Penyusunan Modul</h3>
+          <p class="text-xs text-slate-500">Silakan pilih alur kerja yang ingin Anda gunakan untuk menyusun modul ajar hari ini.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto pt-2">
+          
+          <!-- Opsi 1: Auto Generate AI -->
+          <div @click="inputMode = 'generate'" class="group relative bg-white p-6 md:p-8 rounded-3xl border-2 border-slate-200 hover:border-emerald-500 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between">
+            <div class="space-y-4">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              </div>
+              <div>
+                <span class="px-2.5 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-800 rounded-full">Rekomendasi Cepat</span>
+                <h4 class="text-lg font-bold text-slate-900 mt-1">Otomatis dengan AI</h4>
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                  Cukup pilih Mata Pelajaran & Materi Pokok. AI akan menyusun seluruh komponen Panca Cinta relevan, rincian materi, waktu proporsional, asesmen, dan LKPD secara komprehensif.
+                </p>
+              </div>
+            </div>
+            <div class="pt-6 flex items-center gap-2 text-xs font-bold text-emerald-600 group-hover:translate-x-1 transition-transform">
+              Gunakan Auto Generate AI 
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </div>
+          </div>
+
+          <!-- Opsi 2: Input Manual -->
+          <div @click="inputMode = 'manual'" class="group relative bg-white p-6 md:p-8 rounded-3xl border-2 border-slate-200 hover:border-teal-500 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between">
+            <div class="space-y-4">
+              <div class="w-12 h-12 rounded-2xl bg-teal-500 text-white flex items-center justify-center shadow-lg shadow-teal-500/20 group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+              </div>
+              <div>
+                <span class="px-2.5 py-0.5 text-[10px] font-bold bg-slate-100 text-slate-700 rounded-full">Fleksibel</span>
+                <h4 class="text-lg font-bold text-slate-900 mt-1">Input Manual Mandiri</h4>
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                  Tulis dan ketik sendiri setiap bagian komponen modul secara mendalam dan leluasa sesuai draf dokumen pembelajaran yang Anda miliki.
+                </p>
+              </div>
+            </div>
+            <div class="pt-6 flex items-center gap-2 text-xs font-bold text-teal-600 group-hover:translate-x-1 transition-transform">
+              Mulai Input Manual 
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- HEADING INDIKATOR MODE AKTIF -->
+      <div x-show="inputMode" class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm gap-3">
+        <div class="flex items-center gap-3">
+          <div class="p-2 rounded-xl" :class="inputMode === 'generate' ? 'bg-emerald-100 text-emerald-800' : 'bg-teal-100 text-teal-800'">
+            <svg x-show="inputMode === 'generate'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <svg x-show="inputMode === 'manual'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          </div>
+          <div>
+            <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">Metode Penyusunan Aktif</span>
+            <h4 class="text-sm font-bold text-slate-800" x-text="inputMode === 'generate' ? 'Mode Auto Generate (AI)' : 'Mode Input Manual Mandiri'"></h4>
+          </div>
+        </div>
+
+        <button @click="inputMode = null" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          Ganti Metode
+        </button>
+      </div>
+
+      <!-- ==================== AREA FORM MODUL ==================== -->
+      <div x-show="inputMode" class="space-y-8">
+
+        <!-- FORM SECTIONS GRID -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 text-slate-800">
+
+          <!-- 1. IDENTITAS MODUL -->
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4">
+            <div class="space-y-4">
+              <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+                <div class="p-2.5 bg-emerald-50 text-emerald-700 rounded-2xl">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide">1. Identitas Modul</h3>
+                  <p class="text-xs text-slate-400">Pilih mata pelajaran, kelas/fase, dan alokasi waktu</p>
+                </div>
+              </div>
+              
+              <div class="space-y-3.5 text-xs">
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Nama Madrasah (Identitas Dokumen)</label>
+                  <input type="text" x-model="modul.namaMadrasah" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium text-slate-800">
+                </div>
+
+                <div>
+                  <div class="flex justify-between items-center mb-1">
+                    <label class="block font-semibold text-slate-700">Mata Pelajaran</label>
+                    <span class="text-[10px] text-emerald-600 font-bold cursor-pointer hover:underline" @click="isCustomSubject = !isCustomSubject">
+                      <span x-text="isCustomSubject ? '← Pilih dari Daftar' : '+ Ketik Manual Mapel'"></span>
+                    </span>
+                  </div>
+                  
+                  <!-- Dropdown Mata Pelajaran -->
+                  <select x-show="!isCustomSubject" x-model="modul.mataPelajaran" @change="filterMaterialsBySubject()" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium bg-white">
+                    <option value="Akidah Akhlak">Akidah Akhlak</option>
+                    <option value="Al-Qur'an Hadis">Al-Qur'an Hadis</option>
+                    <option value="Fikih">Fikih</option>
+                    <option value="Sejarah Kebudayaan Islam (SKI)">Sejarah Kebudayaan Islam (SKI)</option>
+                    <option value="Bahasa Arab">Bahasa Arab</option>
+                    <option value="Bahasa Jawa">Bahasa Jawa</option>
+                    <option value="Pendidikan Pancasila">Pendidikan Pancasila</option>
+                    <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                    <option value="Matematika">Matematika</option>
+                    <option value="IPAS (Alam & Sosial)">IPAS (Alam & Sosial)</option>
+                    <option value="PJOK">PJOK</option>
+                    <option value="Seni dan Budaya">Seni dan Budaya</option>
+                    <!-- Tampilkan opsi kustom di dropdown jika ada -->
+                    <template x-for="cs in customSubjectsList" :key="cs">
+                      <option :value="cs" x-text="cs"></option>
+                    </template>
+                  </select>
+
+                  <!-- Input Text Manual Mata Pelajaran -->
+                  <div x-show="isCustomSubject" class="flex gap-2">
+                    <input type="text" x-model="modul.mataPelajaran" placeholder="Ketik nama mata pelajaran baru..." class="w-full p-3 border border-emerald-300 bg-emerald-50/30 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+                    <button @click="saveCustomSubject()" type="button" class="px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-[11px] font-bold whitespace-nowrap shadow-sm">Simpan</button>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Kelas / Fase</label>
+                    <select x-model="modul.faseKelas" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium bg-white">
+                      <option value="Kelas 1 / Fase A">Kelas 1 / Fase A</option>
+                      <option value="Kelas 2 / Fase A">Kelas 2 / Fase A</option>
+                      <option value="Kelas 3 / Fase B">Kelas 3 / Fase B</option>
+                      <option value="Kelas 4 / Fase B">Kelas 4 / Fase B</option>
+                      <option value="Kelas 5 / Fase C">Kelas 5 / Fase C</option>
+                      <option value="Kelas 6 / Fase C">Kelas 6 / Fase C</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Semester</label>
+                    <select x-model="modul.semester" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium bg-white">
+                      <option value="1 (Ganjil)">1 (Ganjil)</option>
+                      <option value="2 (Genap)">2 (Genap)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- PILIH DARI BANK MATERI OTOMATIS -->
+                <div>
+                  <div class="flex justify-between items-center mb-1">
+                    <label class="block font-semibold text-slate-700">Pilih Materi dari Bank Materi (Auto-Fill Relevan)</label>
+                    <span class="text-[10px] text-emerald-600 font-bold cursor-pointer hover:underline" @click="activeTab = 'materials'">+ Kelola Bank Materi</span>
+                  </div>
+                  <select @change="applySelectedMaterial($event.target.value)" class="w-full p-3 border border-emerald-300 bg-emerald-50/50 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-semibold text-emerald-900">
+                    <option value="">-- Pilih Materi Tersimpan (Auto-Fill Materi, Profil & Panca Cinta Relevan) --</option>
+                    <template x-for="item in materialBank.filter(m => m.subject === modul.mataPelajaran)" :key="item.id">
+                      <option :value="item.title" x-text="item.title" :selected="modul.materi === item.title"></option>
+                    </template>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Materi Pokok</label>
+                  <input type="text" x-model="modul.materi" placeholder="Contoh: Adab Berteman dan Menumbuhkan Sikap Empati" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+                </div>
+
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Alokasi Waktu</label>
+                  <input type="text" x-model="modul.alokasiWaktu" placeholder="2 x 35 Menit (70 Menit)" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+                </div>
+              </div>
+            </div>
+
+            <!-- TOMBOL GENERATE AI -->
+            <template x-if="inputMode === 'generate'">
+              <div class="pt-4 border-t border-slate-100 mt-4">
+                <button @click="generateModulWithAI()" :disabled="isLoading" 
+                        class="w-full py-3.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-2xl shadow-lg shadow-emerald-600/20 transition-all transform active:scale-[0.99] flex items-center justify-center gap-2.5 disabled:opacity-50">
+                  <template x-if="!isLoading">
+                    <span class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-amber-300 fill-amber-300" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.2-6.3-4.6-6.3 4.6 2.3-7.2-6-4.6h7.6z"/></svg>
+                      Generate Komponen KBC via AI
+                    </span>
+                  </template>
+                  <template x-if="isLoading">
+                    <span class="flex items-center gap-2">
+                      <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                      Menyusun Narasi Kilat...
+                    </span>
+                  </template>
+                </button>
+                <p class="text-[11px] text-center text-slate-400 mt-2">Sistem AI akan menyusun uraian profil, panca cinta relevan, dan waktu proporsional secara otomatis.</p>
+              </div>
+            </template>
+          </div>
+
+          <!-- 2. IDENTIFIKASI, MATERI & KBC -->
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all space-y-4">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+              <div class="p-2.5 bg-rose-50 text-rose-600 rounded-2xl">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide">2. Identifikasi, Materi & Panca Cinta</h3>
+                <p class="text-xs text-slate-400">Kesiapan murid, rincian materi runtut, dan nilai kasih sayang relevan</p>
+              </div>
+            </div>
+
+            <div class="space-y-3.5 text-xs">
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Kesiapan Murid</label>
+                <textarea x-model="modul.kesiapanMurid" rows="3" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium leading-relaxed" placeholder="Analisis mendalam kondisi psikologis dan awal kognitif murid..."></textarea>
+              </div>
+
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Rincian Materi Pembelajaran (Runtut & Detail)</label>
+                <textarea x-model="modul.materiPembelajaran" rows="4" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium leading-relaxed" placeholder="Uraikan sub-materi pelajaran secara runtut dan terperinci..."></textarea>
+              </div>
+
+              <div class="space-y-3">
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Dimensi Profil Lulusan (Relevan dengan Materi)</label>
+                  <textarea x-model="modul.profilLulusan" rows="2" placeholder="Uraikan dimensi profil lulusan yang spesifik..." class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium leading-relaxed"></textarea>
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Topik Panca Cinta (Otomatis Sesuai Relevansi Materi)</label>
+                  <textarea x-model="modul.pancaCinta" rows="2" placeholder="Panca cinta yang relevan diambil secara otomatis..." class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium leading-relaxed text-emerald-900 bg-emerald-50/20"></textarea>
+                </div>
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Materi Integrasi KBC</label>
+                <textarea x-model="modul.integrasiKBC" rows="3" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium leading-relaxed" placeholder="Integrasi nilai kasih sayang (Rahmah) ke dalam materi pokok..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. DESAIN PEMBELAJARAN -->
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all space-y-4">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+              <div class="p-2.5 bg-sky-50 text-sky-600 rounded-2xl">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide">3. Desain Pembelajaran</h3>
+                <p class="text-xs text-slate-400">Capaian, lintasan ilmu, dan tujuan pembelajaran</p>
+              </div>
+            </div>
+
+            <div class="space-y-3.5 text-xs">
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Capaian Pembelajaran (CP)</label>
+                <textarea x-model="modul.cp" rows="3" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium leading-relaxed"></textarea>
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Lintas Disiplin Ilmu</label>
+                <input type="text" x-model="modul.lintasDisiplin" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Tujuan Pembelajaran (TP)</label>
+                <textarea x-model="modul.tp" rows="4" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium leading-relaxed"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. KERANGKA PEMBELAJARAN -->
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all space-y-4">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+              <div class="p-2.5 bg-amber-50 text-amber-600 rounded-2xl">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide">4. Kerangka Pembelajaran</h3>
+                <p class="text-xs text-slate-400">Pedagogik, ekosistem kelas, dan pemanfaatan digital</p>
+              </div>
+            </div>
+
+            <div class="space-y-3.5 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Praktek Pedagogik</label>
+                  <input type="text" x-model="modul.praktekPedagogik" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Kemitraan Pembelajaran</label>
+                  <input type="text" x-model="modul.kemitraan" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+                </div>
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Lingkungan Pembelajaran</label>
+                <input type="text" x-model="modul.lingkungan" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Pemanfaatan Digital</label>
+                <input type="text" x-model="modul.digital" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 5. PENGALAMAN BELAJAR DENGAN ALOKASI WAKTU PROPORSIONAL -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all space-y-4 text-slate-800">
+          <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+            <div class="p-2.5 bg-indigo-50 text-indigo-600 rounded-2xl">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide">5. Pengalaman Belajar (Alokasi Waktu Proporsional)</h3>
+              <p class="text-xs text-slate-400">Pembagian durasi waktu menit yang jelas pada setiap tahapan pembelajaran</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Kegiatan Awal (Orientasi & Doa)</label>
+              <textarea x-model="modul.kegiatanAwal" rows="4" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium leading-relaxed"></textarea>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Kegiatan Inti (Eksplorasi & Kolaborasi)</label>
+              <textarea x-model="modul.kegiatanInti" rows="4" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium leading-relaxed"></textarea>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Mengaplikasi (Aksi Cinta Nyata)</label>
+              <textarea x-model="modul.mengaplikasi" rows="4" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium leading-relaxed"></textarea>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Merefleksi (Perasaan & Resonansi Nilai)</label>
+              <textarea x-model="modul.merefleksi" rows="4" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium leading-relaxed"></textarea>
+            </div>
+          </div>
+          <div class="text-xs">
+            <label class="block font-semibold text-slate-700 mb-1">Kegiatan Penutup (Apresiasi & Pesan Moral)</label>
+            <textarea x-model="modul.kegiatanPenutup" rows="3" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium leading-relaxed"></textarea>
+          </div>
+        </div>
+
+        <!-- 6 & 7. ASESMEN & LKPD -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-slate-800">
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all space-y-4 text-xs">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+              <div class="p-2.5 bg-emerald-50 text-emerald-700 rounded-2xl">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide">6. Asesmen Pembelajaran</h3>
+                <p class="text-xs text-slate-400">Evaluasi Sikap (Panca Cinta), Pengetahuan, dan Kinerja</p>
+              </div>
+            </div>
+            <textarea x-model="modul.asesmen" rows="8" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium leading-relaxed"></textarea>
+          </div>
+
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all space-y-4 text-xs">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+              <div class="p-2.5 bg-teal-50 text-teal-700 rounded-2xl">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide">7. Lembar Kerja Murid (LKPD)</h3>
+                <p class="text-xs text-slate-400">Aktivitas terstruktur murid dan refleksi empati</p>
+              </div>
+            </div>
+            <textarea x-model="modul.lkpd" rows="8" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium leading-relaxed"></textarea>
+          </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="flex justify-between items-center pt-4">
+          <button @click="saveToArchive()" class="px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-2xl shadow-md transition-all flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+            Simpan ke Arsip Modul
+          </button>
+          <button @click="activeTab = 'preview'" class="px-8 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-2xl shadow-xl shadow-emerald-600/20 transition-all flex items-center gap-2">
+            Lihat Pratinjau Dokumen Cetak 
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ==================== TAB 2: KELOLA BANK MATERI ==================== -->
+    <div x-show="activeTab === 'materials'" x-cloak class="no-print space-y-6 max-w-5xl mx-auto text-slate-800">
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+        
+        <!-- Header Section -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="p-2.5 bg-emerald-50 text-emerald-700 rounded-2xl">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide">Modul Kelola Bank Materi</h3>
+              <p class="text-xs text-slate-400">Tambahkan materi beserta uraian rinci Profil Lulusan & Panca Cinta yang relevan untuk auto-fill otomatis</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full" x-text="materialBank.length + ' Materi Tersimpan'"></span>
+        </div>
+
+        <!-- Form Tambah Materi Baru -->
+        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4">
+          <h4 class="font-bold text-xs text-slate-800 uppercase tracking-wide">Tambah Materi Pokok Baru ke Bank Data</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Mata Pelajaran</label>
+              <select x-model="newMaterial.subject" class="w-full p-2.5 border border-slate-200 rounded-xl bg-white font-medium">
+                <option value="Akidah Akhlak">Akidah Akhlak</option>
+                <option value="Al-Qur'an Hadis">Al-Qur'an Hadis</option>
+                <option value="Fikih">Fikih</option>
+                <option value="Sejarah Kebudayaan Islam (SKI)">Sejarah Kebudayaan Islam (SKI)</option>
+                <option value="Bahasa Arab">Bahasa Arab</option>
+                <option value="Bahasa Jawa">Bahasa Jawa</option>
+                <option value="Pendidikan Pancasila">Pendidikan Pancasila</option>
+                <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                <option value="Matematika">Matematika</option>
+                <option value="IPAS (Alam & Sosial)">IPAS (Alam & Sosial)</option>
+                <option value="PJOK">PJOK</option>
+                <option value="Seni dan Budaya">Seni dan Budaya</option>
+                <template x-for="cs in customSubjectsList" :key="cs">
+                  <option :value="cs" x-text="cs"></option>
+                </template>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Judul Materi Pokok</label>
+              <input type="text" x-model="newMaterial.title" placeholder="Contoh: Meneladani Sifat Asmaul Husna Ar-Rahman" class="w-full p-2.5 border border-slate-200 rounded-xl bg-white font-medium">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block font-semibold text-slate-700 mb-1">Rincian Materi Pembelajaran</label>
+              <textarea x-model="newMaterial.description" rows="2" placeholder="Tuliskan rincian sub-materi secara ringkas..." class="w-full p-2.5 border border-slate-200 rounded-xl bg-white font-medium leading-relaxed"></textarea>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block font-semibold text-slate-700 mb-1">Uraian Dimensi Profil Lulusan (Relevan dengan Materi)</label>
+              <textarea x-model="newMaterial.profilLulusan" rows="2" placeholder="Uraikan dimensi profil lulusan yang spesifik untuk materi ini..." class="w-full p-2.5 border border-slate-200 rounded-xl bg-white font-medium leading-relaxed"></textarea>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block font-semibold text-slate-700 mb-1">Uraian Topik Panca Cinta (Relevan & Spesifik dengan Materi)</label>
+              <textarea x-model="newMaterial.pancaCinta" rows="2" placeholder="Uraikan topik panca cinta yang spesifik dan mendalam untuk materi ini..." class="w-full p-2.5 border border-slate-200 rounded-xl bg-white font-medium leading-relaxed"></textarea>
+            </div>
+          </div>
+          <div class="flex justify-end pt-2">
+            <button @click="addMaterial()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Simpan ke Bank Materi
+            </button>
+          </div>
+        </div>
+
+        <!-- Daftar Bank Materi -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-xs text-slate-700 uppercase tracking-wide">Daftar Bank Materi Tersimpan</h4>
+          
+          <template x-if="materialBank.length === 0">
+            <div class="text-center py-12 text-slate-400 text-xs">Belum ada materi tersimpan di bank data.</div>
+          </template>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <template x-for="(item, index) in materialBank" :key="item.id">
+              <div class="p-4 rounded-2xl border border-slate-200 bg-white hover:border-emerald-500 transition-all flex flex-col justify-between space-y-3 shadow-sm">
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between">
+                    <span class="px-2 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded-md" x-text="item.subject"></span>
+                    <button @click="deleteMaterial(index)" class="text-rose-500 hover:text-rose-700 p-1">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
+                  </div>
+                  <h4 class="font-bold text-slate-900 text-sm" x-text="item.title"></h4>
+                  <p class="text-slate-500 line-clamp-2 text-[11px]" x-text="'Materi: ' + item.description"></p>
+                  <p class="text-slate-600 line-clamp-2 text-[11px] bg-slate-50 p-2 rounded-lg" x-text="'Profil: ' + item.profilLulusan"></p>
+                  <p class="text-emerald-800 line-clamp-2 text-[11px] bg-emerald-50/50 p-2 rounded-lg" x-text="'Panca Cinta: ' + item.pancaCinta"></p>
+                </div>
+
+                <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+                  <span class="text-[10px] text-slate-400">Auto-fill relevan siap pakai</span>
+                  <button @click="useMaterialInForm(item)" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-lg transition flex items-center gap-1 text-[11px]">
+                    Gunakan di Form
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                  </button>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== TAB 3: PRATINJAU & CETAK ==================== -->
+    <div x-show="activeTab === 'preview'" x-cloak class="space-y-6">
+      
+      <!-- CONTROLS HEADER (NO PRINT) -->
+      <div class="no-print bg-slate-900 text-white p-4 sm:p-5 rounded-3xl shadow-xl border border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-3">
+          <div class="p-2.5 bg-emerald-500/20 text-emerald-400 rounded-2xl border border-emerald-500/30">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-sm">Pratinjau Dokumen Resmi</h3>
+            <p class="text-xs text-slate-400">Siap dicetak atau disimpan sebagai berkas PDF standar A4 Kemenag</p>
+          </div>
+        </div>
+        <button @click="window.print()" class="w-full sm:w-auto px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          Cetak / Simpan PDF
+        </button>
+      </div>
+
+      <!-- PRINTABLE A4 CANVAS -->
+      <div class="print-area bg-white p-8 md:p-14 rounded-2xl shadow-2xl border border-slate-200 max-w-[210mm] mx-auto text-slate-900">
+        
+        <!-- KOP SURAT RESMI -->
+        <div class="border-b-4 border-double border-black pb-4 mb-6 flex items-center gap-4">
+          <template x-if="settings.logoUrl">
+            <img :src="settings.logoUrl" class="w-20 h-20 object-contain">
+          </template>
+          <div class="text-center flex-1">
+            <h3 class="font-bold text-xs tracking-wider uppercase" x-text="settings.kopHeader1">KEMENTERIAN AGAMA REPUBLIK INDONESIA</h3>
+            <h2 class="font-extrabold text-sm tracking-wide uppercase" x-text="settings.kopMadrasahName">MADRASAH IBTIDAIYAH MA'ARIF NU 2 SANGGREMAN</h2>
+            <p class="text-[10px] mt-0.5" x-text="settings.kopAlamat">Jl. Masjid As-Salafiyah Dusun Babakan Sanggreman Rawalo Banyumas 53173</p>
+            <p class="text-[10px] mt-0.5">
+              <span x-show="settings.kopWebsite">Web: <span x-text="settings.kopWebsite"></span></span>
+              <span x-show="settings.kopEmail"> | Email: <span x-text="settings.kopEmail"></span></span>
+              <span x-show="settings.kopTelp"> | Telp: <span x-text="settings.kopTelp"></span></span>
+            </p>
+          </div>
+        </div>
+
+        <!-- JUDUL MODUL -->
+        <div class="text-center mb-6">
+          <h2 class="font-bold text-base underline uppercase">MODUL AJAR KURIKULUM BERBASIS CINTA (KBC)</h2>
+          <p class="text-xs italic mt-0.5">Jenjang Madrasah Ibtidaiyah (MI)</p>
+        </div>
+
+        <!-- ISI TABLE DOKUMEN -->
+        <div class="space-y-4 text-xs">
+          
+          <!-- I. IDENTITAS -->
+          <table class="w-full border-collapse border border-black">
+            <tr class="bg-slate-100 font-bold border-b border-black">
+              <td colspan="2" class="p-2 uppercase">I. IDENTITAS MODUL</td>
+            </tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold w-1/3 border-r border-black">Nama Madrasah</td><td class="p-2 font-bold" x-text="modul.namaMadrasah"></td></tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold border-r border-black">Mata Pelajaran</td><td class="p-2 font-bold" x-text="modul.mataPelajaran"></td></tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold border-r border-black">Materi Pokok</td><td class="p-2 font-semibold" x-text="modul.materi"></td></tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold border-r border-black">Fase / Kelas</td><td class="p-2" x-text="modul.faseKelas"></td></tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold border-r border-black">Semester / Alokasi Waktu</td><td class="p-2" x-text="modul.semester + ' / ' + modul.alokasiWaktu"></td></tr>
+          </table>
+
+          <!-- II. IDENTIFIKASI & MATERI -->
+          <table class="w-full border-collapse border border-black">
+            <tr class="bg-slate-100 font-bold border-b border-black">
+              <td colspan="2" class="p-2 uppercase">II. IDENTIFIKASI, MATERI & INTEGRASI KBC</td>
+            </tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold w-1/3 border-r border-black">Kesiapan Murid</td><td class="p-2 whitespace-pre-line" x-text="modul.kesiapanMurid"></td></tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold w-1/3 border-r border-black">Rincian Materi Pembelajaran</td><td class="p-2 whitespace-pre-line leading-relaxed" x-text="modul.materiPembelajaran"></td></tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold w-1/3 border-r border-black">Dimensi Profil Lulusan</td><td class="p-2 whitespace-pre-line leading-relaxed" x-text="modul.profilLulusan"></td></tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold w-1/3 border-r border-black">Topik Panca Cinta (Relevan)</td><td class="p-2 whitespace-pre-line leading-relaxed font-semibold" x-text="modul.pancaCinta"></td></tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold w-1/3 border-r border-black">Materi Integrasi KBC</td><td class="p-2 whitespace-pre-line" x-text="modul.integrasiKBC"></td></tr>
+          </table>
+
+          <!-- III. DESAIN & KERANGKA -->
+          <table class="w-full border-collapse border border-black">
+            <tr class="bg-slate-100 font-bold border-b border-black">
+              <td colspan="2" class="p-2 uppercase">III. DESAIN & KERANGKA PEMBELAJARAN</td>
+            </tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold w-1/3 border-r border-black">Capaian Pembelajaran (CP)</td><td class="p-2 whitespace-pre-line" x-text="modul.cp"></td></tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold w-1/3 border-r border-black">Lintas Disiplin Ilmu</td><td class="p-2" x-text="modul.lintasDisiplin"></td></tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold w-1/3 border-r border-black">Tujuan Pembelajaran (TP)</td><td class="p-2 whitespace-pre-line" x-text="modul.tp"></td></tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold w-1/3 border-r border-black">Praktek Pedagogik</td><td class="p-2" x-text="modul.praktekPedagogik"></td></tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold w-1/3 border-r border-black">Kemitraan & Lingkungan</td><td class="p-2" x-text="modul.kemitraan + ' | ' + modul.lingkungan"></td></tr>
+            <tr class="border-b border-black"><td class="p-2 font-semibold w-1/3 border-r border-black">Pemanfaatan Digital</td><td class="p-2" x-text="modul.digital"></td></tr>
+          </table>
+
+          <!-- IV. LANGKAH PEMBELAJARAN DENGAN WAKTU PROPORSIONAL -->
+          <div class="border border-black p-3 space-y-2">
+            <h4 class="font-bold bg-slate-100 p-1.5 -mx-3 -mt-3 border-b border-black uppercase">IV. PENGALAMAN BELAJAR (ALOKASI WAKTU PROPORSIONAL)</h4>
+            <p><strong>1. Kegiatan Awal:</strong> <span class="whitespace-pre-line" x-text="modul.kegiatanAwal"></span></p>
+            <p><strong>2. Kegiatan Inti:</strong> <span class="whitespace-pre-line" x-text="modul.kegiatanInti"></span></p>
+            <p><strong>3. Mengaplikasi:</strong> <span class="whitespace-pre-line" x-text="modul.mengaplikasi"></span></p>
+            <p><strong>4. Merefleksi:</strong> <span class="whitespace-pre-line" x-text="modul.merefleksi"></span></p>
+            <p><strong>5. Kegiatan Penutup:</strong> <span class="whitespace-pre-line" x-text="modul.kegiatanPenutup"></span></p>
+          </div>
+
+          <!-- V. ASESMEN & LKPD -->
+          <div class="border border-black p-3 space-y-2">
+            <h4 class="font-bold bg-slate-100 p-1.5 -mx-3 -mt-3 border-b border-black uppercase">V. ASESMEN PEMBELAJARAN</h4>
+            <p class="whitespace-pre-line leading-relaxed" x-text="modul.asesmen"></p>
+          </div>
+
+          <div class="border border-black p-3 space-y-2 page-break">
+            <h4 class="font-bold bg-slate-100 p-1.5 -mx-3 -mt-3 border-b border-black uppercase">VI. LEMBAR KERJA PESERTA DIDIK (LKPD) BERBASIS CINTA</h4>
+            <p class="whitespace-pre-line leading-relaxed" x-text="modul.lkpd"></p>
+          </div>
+
+        </div>
+
+        <!-- TANDA TANGAN -->
+        <div class="mt-12 flex justify-between items-start text-xs text-center">
+          <div class="w-1/2">
+            <p class="mb-1">Mengetahui,</p>
+            <p class="font-bold">Kepala Madrasah</p>
+            <div class="h-16"></div>
+            <p class="font-bold underline" x-text="settings.headmasterName || '(Nama Kepala Madrasah)'"></p>
+            <p x-text="'NIP. ' + (settings.headmasterNip || '....................')"></p>
+          </div>
+          <div class="w-1/2">
+            <p class="mb-1" x-text="(settings.placeDate || 'Banyumas, ...... 2026')"></p>
+            <p class="font-bold">Guru Kelas / Guru Mapel</p>
+            <div class="h-16"></div>
+            <p class="font-bold underline" x-text="settings.teacherName || '(Nama Guru)'"></p>
+            <p x-text="'NIP. ' + (settings.teacherNip || '....................')"></p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ==================== TAB 4: ARSIP MODUL ==================== -->
+    <div x-show="activeTab === 'archive'" x-cloak class="no-print space-y-6 max-w-5xl mx-auto text-slate-800">
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="p-2.5 bg-emerald-50 text-emerald-700 rounded-2xl">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide">Arsip Perangkat Ajar Tersimpan</h3>
+              <p class="text-xs text-slate-400">Kelola, muat kembali, atau hapus riwayat modul yang telah diarsipkan</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full" x-text="archives.length + ' Arsip Tersimpan'"></span>
+        </div>
+
+        <template x-if="archives.length === 0">
+          <div class="text-center py-16 space-y-3">
+            <svg class="w-12 h-12 text-slate-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+            <p class="text-sm font-semibold text-slate-600">Belum ada arsip modul tersimpan.</p>
+            <p class="text-xs text-slate-400">Klik tombol "Simpan ke Arsip" pada halaman Dashboard untuk merekam pekerjaan Anda.</p>
+          </div>
+        </template>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <template x-for="(item, index) in archives" :key="item.id">
+            <div class="p-5 rounded-2xl border border-slate-200 hover:border-emerald-500 bg-slate-50/50 hover:bg-white transition-all flex flex-col justify-between space-y-4 shadow-sm">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="px-2 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded-md" x-text="item.data.mataPelajaran"></span>
+                  <span class="text-[11px] text-slate-400" x-text="item.date"></span>
+                </div>
+                <h4 class="font-bold text-slate-900 text-sm" x-text="item.title"></h4>
+                <p class="text-slate-500 line-clamp-2" x-text="'Materi: ' + item.data.materi"></p>
+                <p class="text-slate-400 text-[11px]" x-text="'Madrasah: ' + item.data.namaMadrasah"></p>
+              </div>
+
+              <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+                <button @click="loadArchive(item)" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition flex items-center justify-center gap-1.5">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                  Muat Modul
+                </button>
+                <button @click="deleteArchive(index)" class="py-2 px-3 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl transition flex items-center justify-center gap-1">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                  Hapus
+                </button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 5: PENGATURAN ==================== -->
+    <div x-show="activeTab === 'settings'" x-cloak class="no-print space-y-8 max-w-4xl mx-auto text-slate-800">
+      
+      <!-- API KEY & CONFIG -->
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-5">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+          <div class="p-2.5 bg-amber-50 text-amber-600 rounded-2xl">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide">Pengaturan Engine AI Modul</h3>
+            <p class="text-xs text-slate-400">Pilih penyedia AI dan masukkan API Key Anda</p>
+          </div>
+        </div>
+
+        <div class="space-y-4 text-xs">
+          <!-- PILIHAN PROVIDER -->
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Pilih Layanan Engine AI</label>
+            <select x-model="settings.provider" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-bold text-emerald-800 bg-emerald-50/50">
+              <option value="gemini">Google Gemini Direct API (Direkomendasikan • Cepat & Anti Gagal)</option>
+              <option value="openrouter">OpenRouter AI (Multi-Model Engine)</option>
+            </select>
+          </div>
+
+          <!-- API KEY INPUT -->
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1" x-text="settings.provider === 'gemini' ? 'Google Gemini API Key' : 'OpenRouter API Key'"></label>
+            <input type="password" x-model="settings.apiKey" :placeholder="settings.provider === 'gemini' ? 'AIzaSy...' : 'sk-or-v1-...'" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-mono text-xs">
+            
+            <template x-if="settings.provider === 'gemini'">
+              <p class="text-[11px] text-slate-500 mt-1.5">
+                💡 Dapatkan Google API Key gratis Anda dalam 30 detik di: 
+                <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-emerald-600 font-bold underline">aistudio.google.com/app/apikey</a>
+              </p>
+            </template>
+            <template x-if="settings.provider === 'openrouter'">
+              <p class="text-[11px] text-slate-500 mt-1.5">
+                💡 Dapatkan OpenRouter Key di: 
+                <a href="https://openrouter.ai/keys" target="_blank" class="text-emerald-600 font-bold underline">openrouter.ai/keys</a>
+              </p>
+            </template>
+          </div>
+
+          <!-- PILIHAN MODEL OPENROUTER -->
+          <div x-show="settings.provider === 'openrouter'">
+            <label class="block font-semibold text-slate-700 mb-1">Pilihan Model OpenRouter</label>
+            <select x-model="settings.aiModel" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium bg-white">
+              <option value="google/gemini-2.0-flash-exp:free">Google Gemini 2.0 Flash (Free / Cepat)</option>
+              <option value="qwen/qwen-2.5-72b-instruct:free">Qwen 2.5 72B Instruct (Free / Cerdas)</option>
+              <option value="meta-llama/llama-3.3-70b-instruct:free">Meta Llama 3.3 70B (Free / Detail)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- KOP SURAT & LOGO -->
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+          <div class="p-2.5 bg-emerald-50 text-emerald-700 rounded-2xl">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide">Pengaturan Kop Surat & Identitas Lembaga</h3>
+            <p class="text-xs text-slate-400">Identitas lengkap lembaga pada header cetak dokumen</p>
+          </div>
+        </div>
+
+        <div class="space-y-4 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Unggah Logo Instansi / Kemenag / Madrasah</label>
+            <input type="file" @change="uploadLogo" accept="image/*" class="w-full p-2 border border-slate-200 rounded-xl text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Header Baris 1 (Instansi Induk)</label>
+            <input type="text" x-model="settings.kopHeader1" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Nama Madrasah pada Kop Surat (Mandiri / Terpisah)</label>
+            <input type="text" x-model="settings.kopMadrasahName" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Alamat Lembaga</label>
+            <input type="text" x-model="settings.kopAlamat" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Website Resmi Lembaga</label>
+            <input type="text" x-model="settings.kopWebsite" placeholder="www.mimaarifnu2sanggreman.sch.id" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Email Resmi Lembaga</label>
+            <input type="text" x-model="settings.kopEmail" placeholder="mimaarifnu2sanggreman@gmail.com" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Nomor Kontak / Telepon Lembaga</label>
+            <input type="text" x-model="settings.kopTelp" placeholder="081226738883" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+          </div>
+        </div>
+      </div>
+
+      <!-- PENANDATANGAN -->
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+          <div class="p-2.5 bg-sky-50 text-sky-600 rounded-2xl">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide">Pengaturan Penandatangan</h3>
+            <p class="text-xs text-slate-400">Nama & NIP Kepala Madrasah serta Guru penyusun</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Nama Kepala Madrasah</label>
+            <input type="text" x-model="settings.headmasterName" placeholder="Siti Rochimah, S.Pd.I." class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">NIP Kepala Madrasah</label>
+            <input type="text" x-model="settings.headmasterNip" placeholder="197605102003121002" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Nama Guru Kelas / Mapel</label>
+            <input type="text" x-model="settings.teacherName" placeholder="Jaenal Maskun, S.Pd.I." class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">NIP Guru Kelas / Mapel</label>
+            <input type="text" x-model="settings.teacherNip" placeholder="197808152009011009" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block font-semibold text-slate-700 mb-1">Tempat & Tanggal Dokumen</label>
+            <input type="text" x-model="settings.placeDate" placeholder="Banyumas, 21 Juli 2026" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none font-medium">
+          </div>
+        </div>
+      </div>
+
+      <!-- Save Button -->
+      <div class="flex justify-end">
+        <button @click="saveSettings()" class="px-8 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-2xl shadow-lg shadow-emerald-600/20 transition-all flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+          Simpan Semua Pengaturan
+        </button>
+      </div>
+
+    </div>
+
+    <!-- FOOTER APLIKASI (NO PRINT) -->
+    <footer class="no-print mt-16 pb-6 text-center text-xs text-slate-500 border-t border-slate-200 pt-6">
+      <p>Aplikasi Perangkat Ajar Berbasis AI • Kurikulum Berbasis Cinta (KBC)</p>
+      <p class="mt-1">Dikembangkan dan Dirancang oleh <span class="font-bold text-slate-700">Jaenal Maskun, S.Pd.I.</span></p>
+    </footer>
+
+  </main>
+
+  <script>
+    function appData() {
+      return {
+        activeTab: 'form',
+        inputMode: null, // null | 'generate' | 'manual'
+        isLoading: false,
+        isCustomSubject: false,
+        customSubjectsList: [],
+        archives: [],
+        materialBank: [
+          {
+            id: 1,
+            subject: 'Akidah Akhlak',
+            title: 'Adab Berteman dan Menumbuhkan Sikap Empati',
+            description: '1. Pengertian dan urgensi adab berteman dalam Islam.\n2. Indikator sikap empati dan ukhuwah islamiyah.\n3. Studi kasus nyata peduli sesama.',
+            profilLulusan: 'Beriman, Bertaqwa kepada Tuhan Yang Maha Esa, Berakhlak Mulia (Fokus akhlak kepada sesama manusia melalui pembiasaan empati, tolong-menolong, dan menghindari perundungan), Gotong Royong, dan Bernalar Kritis.',
+            pancaCinta: 'Cinta Diri & Sesama Manusia (Diwujudkan melalui kesadaran mengenali emosi diri, menghargai perasaan teman sebaya, serta menumbuhkan kepedulian sosial secara langsung di lingkungan madrasah).'
+          },
+          {
+            id: 2,
+            subject: 'Bahasa Jawa',
+            title: 'Unggah-Ungguh Basa lan Nyritakake Pengalaman',
+            description: '1. Mengenal ragam bahasa ngoko dan krama.\n2. Tata krama bertutur kata kepada orang yang lebih tua.\n3. Menyusun kalimat sederhana bahasa Jawa.',
+            profilLulusan: 'Beriman, Bertaqwa kepada Tuhan Yang Maha Esa, Berakhlak Mulia (Berakhlak dalam bertutur kata dan menghormati orang lain), dan Berkebhinekaan Global.',
+            pancaCinta: 'Cinta Tanah Air & Bangsa / Budaya Lokal (Melestarikan nilai luhur tata krama dan bahasa daerah sebagai identitas dan kearifan lokal Nusantara).'
+          },
+          {
+            id: 3,
+            subject: 'Fikih',
+            title: 'Ketentuan Shalat Fardhu dan Praktiknya',
+            description: '1. Syarat sah dan wajib shalat fardhu.\n2. Rukun dan sunnah shalat.\n3. Praktik gerakan dan bacaan shalat khusyuk.',
+            profilLulusan: 'Beriman, Bertaqwa kepada Tuhan Yang Maha Esa (Ketaatan beribadah secara disiplin dan khusyuk), Mandiri, dan Bertanggung Jawab.',
+            pancaCinta: 'Cinta Allah & Rasul (Menegakkan tiang agama dan memenuhi panggilan ibadah fardhu dengan penuh kesadaran spiritual, ketundukan hati, serta kecintaan mutlak kepada Sang Pencipta).'
+          }
+        ],
+        newMaterial: {
+          subject: 'Akidah Akhlak',
+          title: '',
+          description: '',
+          profilLulusan: '',
+          pancaCinta: ''
+        },
+        settings: {
+          provider: 'gemini',
+          apiKey: '',
+          aiModel: 'google/gemini-2.0-flash-exp:free',
+          kopHeader1: 'KEMENTERIAN AGAMA REPUBLIK INDONESIA',
+          kopMadrasahName: "MADRASAH IBTIDAIYAH MA'ARIF NU 2 SANGGREMAN",
+          kopAlamat: 'Jl. Masjid As-Salafiyah Dusun Babakan Sanggreman Rawalo Banyumas 53173',
+          kopWebsite: 'www.mimaarifnu2sanggreman.sch.id',
+          kopEmail: 'mimaarifnu2sanggreman@gmail.com',
+          kopTelp: '081226738883',
+          logoUrl: '',
+          headmasterName: 'Siti Rochimah, S.Pd.I.',
+          headmasterNip: '197605102003121002',
+          teacherName: 'Jaenal Maskun, S.Pd.I.',
+          teacherNip: '197808152009011009',
+          placeDate: 'Banyumas, 21 Juli 2026'
+        },
+        modul: {
+          namaMadrasah: "MI Ma'arif NU 2 Sanggreman",
+          mataPelajaran: 'Akidah Akhlak',
+          materi: 'Adab Berteman dan Menumbuhkan Sikap Empati',
+          faseKelas: 'Kelas 4 / Fase B',
+          semester: '1 (Ganjil)',
+          alokasiWaktu: '2 x 35 Menit (70 Menit)',
+          kesiapanMurid: 'Sebagian besar peserta didik kelas 4 telah memahami tata krama dasar dalam berkomunikasi sehari-hari. Namun, sekitar 35% murid masih menunjukkan hambatan emosional dalam mengendalikan ego saat bermain kelompok, serta membutuhkan bimbingan intensif untuk membiasakan tutur kata santun dan kepedulian (empati) ketika melihat teman sejawat mengalami kesulitan.',
+          materiPembelajaran: '1. Pengertian dan urgensi adab berteman dalam sudut pandang Islam.\n2. Indikator sikap empati, tolong-menolong, dan ukhuwah islamiyah antarpeserta didik.\n3. Studi kasus nyata: Mengenali tanda-tanda teman yang sedang mengalami kesulitan dan cara merespons dengan penuh kasih sayang.\n4. Pembiasaan bertutur kata santun dan menghindari perilaku perundungan (bullying) di lingkungan madrasah.',
+          profilLulusan: 'Beriman, Bertaqwa kepada Tuhan Yang Maha Esa, Berakhlak Mulia (Fokus pada akhlak kepada sesama manusia melalui pembiasaan empati, tolong-menolong, dan menghindari perundungan), Gotong Royong, dan Bernalar Kritis.',
+          pancaCinta: 'Cinta Diri & Sesama Manusia (Diwujudkan melalui kesadaran mengenali emosi diri, menghargai perasaan teman sebaya, serta menumbuhkan kepedulian sosial secara langsung di lingkungan madrasah).',
+          integrasiKBC: 'Mengintegrasikan nilai utama Kasih Sayang (Ar-Rahmah) dan Ukhuwah Islamiyah ke dalam dinamika kelompok. Murid diajarkan bahwa menghargai perasaan teman adalah wujud nyata dari keimanan dan wujud cinta kasih kepada sesama ciptaan Allah SWT.',
+          cp: 'Peserta didik mampu memahami dan menerapkan adab terpuji dalam kehidupan sehari-hari, khususnya adab bergaul dengan teman sebaya, serta mengekspresikan rasa empati, saling menghargai, dan menjauhi perilaku perundungan (bullying) dalam lingkungan madrasah maupun masyarakat.',
+          lintasDisiplin: 'Bahasa Indonesia (Keterampilan Berkomunikasi Empatik dan Santun), Pendidikan Pancasila (Penerapan Sila ke-2 dan Kebhinnekaan Global).',
+          tp: '1. Murid mampu menjelaskan minimal 3 pentingnya sikap empati dan adab berteman berdasarkan nilai-nilai Islam dengan tepat.\n2. Murid dapat meneladani dan memperagakan perilaku kasih sayang antarteman melalui aktivitas kerja sama kelompok secara santun.',
+          praktekPedagogik: 'Cooperative Learning dipadukan dengan Model Role Playing (Simulasi Empati dan Kasih Sayang Berbasis KBC).',
+          kemitraan: 'Kolaborasi interaktif antarmurid melalui diskusi kelompok heterogen serta dukungan dari orang tua di rumah melalui jurnal pembiasaan adab santun harian.',
+          lingkungan: 'Menciptakan iklim kelas yang ramah anak, inklusif, aman secara emosional, kaya akan kalimat apresiatif, serta bebas dari segala bentuk perundungan dan diskriminasi.',
+          digital: 'Penggunaan media presentasi Canva Interaktif, penayangan video animasi kisah teladan adab Rasulullah SWT, dan LKPD Digital.',
+          kegiatanAwal: '1. Guru menyapa peserta didik dengan senyuman hangat, mengucapkan salam penuh kasih sayang, dan memandu doa bersama. (5 Menit)\n2. Guru melakukan refleksi emosional awal ("Cek Perasaan Cinta") dan apersepsi mengaitkan materi harian. (5 Menit)',
+          kegiatanInti: '1. Eksplorasi Konsep: Murid menyimak video animasi teladan sahabat Nabi tentang persaudaraan dan empati. (15 Menit)\n2. Diskusi Terbimbing: Membedah studi kasus sederhana mengenai respon empati saat teman mengalami kesulitan. (15 Menit)\n3. Simulasi Role Playing: Setiap kelompok memperagakan skenario adab menyapa dan membantu sesama. (15 Menit)',
+          mengaplikasi: 'Peserta didik menuliskan satu janji aksi nyata pada "Pohon Empati Kelas" mengenai bentuk kepedulian yang akan diterapkan kepada teman sebangku atau keluarga di rumah. (10 Menit)',
+          merefleksi: 'Murid merenung melalui pertanyaan pemantik: "Bagaimana rasanya ketika kita didengarkan dan dibantu oleh teman?" serta penguatan nilai kasih sayang. (5 Menit)',
+          kegiatanPenutup: '1. Guru bersama peserta didik merangkum kesimpulan pembelajaran tentang adab berteman.\n2. Guru memberikan apresiasi spesifik serta menutup pelajaran dengan doa bersama dan salam kasih sayang. (5 Menit)',
+          asesmen: '1. Asesmen Sikap (Afektif): Lembar Observasi Panca Cinta (Menilai empati, kesantunan bertutur kata, dan kepekaan sosial selama diskusi).\n2. Asesmen Pengetahuan (Kognitif): Tes tertulis/lisan singkat mengenai konsep adab berteman dan indikator empati.\n3. Asesmen Performa (Psikomotorik): Rubrik penilaian Unjuk Kerja Role-Playing (Ketepatan nada bicara, ekspresi wajah, dan substansi pesan moral).',
+          lkpd: 'LEMBAR KERJA PESERTA DIDIK (LKPD) - BERBASIS CINTA\nNama Murid: ..................  Kelas: IV (...)\n\n[BAGIAN 1: REFLEKSI HATI]\n1. Tuliskan nama salah satu temanmu di kelas dan sebutkan 2 kebaikan yang sangat kamu sukai dari dirinya!\n2. Jika kamu melihat temanmu tidak membawa pensil atau merasa kesulitan dalam membaca, apa aksi cinta yang akan kamu lakukan?\n\n[BAGIAN 2: TUGAS KELOMPOK - AYO SIMULASIKAN]\nBuatlah percakapan singkat bersama 3 orang temanmu yang menunjukkan adab menghibur kawan yang sedang bersedih!'
+        },
+        init() {
+          try {
+            const savedSettings = localStorage.getItem('kbc_settings_v3');
+            if (savedSettings) {
+              const parsed = JSON.parse(savedSettings);
+              this.settings = { ...this.settings, ...parsed };
+            }
+            if (!this.settings.kopMadrasahName || this.settings.kopMadrasahName.trim() === '') {
+              this.settings.kopMadrasahName = "MADRASAH IBTIDAIYAH MA'ARIF NU 2 SANGGREMAN";
+            }
+            if (!this.settings.kopAlamat || this.settings.kopAlamat.trim() === '' || this.settings.kopAlamat.includes('Malang')) {
+              this.settings.kopAlamat = 'Jl. Masjid As-Salafiyah Dusun Babakan Sanggreman Rawalo Banyumas 53173';
+            }
+            if (!this.settings.kopTelp || this.settings.kopTelp.trim() === '') {
+              this.settings.kopTelp = '081226738883';
+            }
+            if (!this.settings.headmasterName || this.settings.headmasterName.trim() === '' || this.settings.headmasterName.includes('Ahmad') || this.settings.headmasterName.includes('Kepala Madrasah')) {
+              this.settings.headmasterName = 'Siti Rochimah, S.Pd.I.';
+            }
+            if (!this.settings.teacherNip || this.settings.teacherNip.trim() === '' || this.settings.teacherNip === '198904122019031005') {
+              this.settings.teacherNip = '197808152009011009';
+            }
+            if (!this.settings.placeDate || this.settings.placeDate.includes('Malang')) {
+              this.settings.placeDate = 'Banyumas, 21 Juli 2026';
+            }
+
+            const savedArchives = localStorage.getItem('kbc_archives');
+            if (savedArchives) this.archives = JSON.parse(savedArchives);
+
+            const savedMaterials = localStorage.getItem('kbc_materials');
+            if (savedMaterials) this.materialBank = JSON.parse(savedMaterials);
+
+            const savedCustomSubjects = localStorage.getItem('kbc_custom_subjects');
+            if (savedCustomSubjects) this.customSubjectsList = JSON.parse(savedCustomSubjects);
+          } catch (e) {
+            console.warn('Gagal memuat penyimpanan lokal:', e);
+          }
+        },
+        saveCustomSubject() {
+          const val = this.modul.mataPelajaran ? this.modul.mataPelajaran.trim() : '';
+          if (!val) {
+            alert('Nama mata pelajaran tidak boleh kosong!');
+            return;
+          }
+          if (!this.customSubjectsList.includes(val)) {
+            this.customSubjectsList.push(val);
+            localStorage.setItem('kbc_custom_subjects', JSON.stringify(this.customSubjectsList));
+          }
+          this.isCustomSubject = false;
+          alert(`✅ Mata pelajaran "${val}" berhasil ditambahkan dan disimpan.`);
+        },
+        saveSettings() {
+          localStorage.setItem('kbc_settings_v3', JSON.stringify(this.settings));
+          alert('Pengaturan berhasil disimpan!');
+        },
+        saveToArchive() {
+          const archiveItem = {
+            id: Date.now(),
+            date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+            title: `${this.modul.mataPelajaran} - ${this.modul.materi}`,
+            data: JSON.parse(JSON.stringify(this.modul))
+          };
+          this.archives.unshift(archiveItem);
+          localStorage.setItem('kbc_archives', JSON.stringify(this.archives));
+          alert('📁 Modul ajar berhasil disimpan ke arsip!');
+        },
+        loadArchive(item) {
+          this.modul = JSON.parse(JSON.stringify(item.data));
+          this.activeTab = 'form';
+          alert('📂 Modul arsip berhasil dimuat kembali ke editor!');
+        },
+        deleteArchive(index) {
+          if (confirm('Yakin ingin menghapus arsip modul ini?')) {
+            this.archives.splice(index, 1);
+            localStorage.setItem('kbc_archives', JSON.stringify(this.archives));
+          }
+        },
+        addMaterial() {
+          if (!this.newMaterial.title.trim()) {
+            alert('Judul materi pokok tidak boleh kosong!');
+            return;
+          }
+          const item = {
+            id: Date.now(),
+            subject: this.newMaterial.subject,
+            title: this.newMaterial.title.trim(),
+            description: this.newMaterial.description.trim(),
+            profilLulusan: this.newMaterial.profilLulusan.trim() || 'Beriman, Bertaqwa kepada Tuhan Yang Maha Esa, dan Berakhlak Mulia yang disesuaikan secara mendalam dengan substansi materi.',
+            pancaCinta: this.newMaterial.pancaCinta.trim() || 'Cinta Diri & Sesama Manusia (Diwujudkan melalui internalisasi nilai kasih sayang dan empati sesuai konteks materi).'
+          };
+          this.materialBank.unshift(item);
+          localStorage.setItem('kbc_materials', JSON.stringify(this.materialBank));
+          this.newMaterial.title = '';
+          this.newMaterial.description = '';
+          this.newMaterial.profilLulusan = '';
+          this.newMaterial.pancaCinta = '';
+          alert('✅ Materi baru beserta uraian profil & Panca Cinta relevan berhasil ditambahkan!');
+        },
+        deleteMaterial(index) {
+          if (confirm('Yakin ingin menghapus materi ini dari bank data?')) {
+            this.materialBank.splice(index, 1);
+            localStorage.setItem('kbc_materials', JSON.stringify(this.materialBank));
+          }
+        },
+        applySelectedMaterial(title) {
+          if (!title) return;
+          const found = this.materialBank.find(m => m.title === title);
+          if (found) {
+            this.modul.materi = found.title;
+            if (found.description) {
+              this.modul.materiPembelajaran = found.description;
+            }
+            if (found.profilLulusan) {
+              this.modul.profilLulusan = found.profilLulusan;
+            }
+            if (found.pancaCinta) {
+              this.modul.pancaCinta = found.pancaCinta;
+            }
+          }
+        },
+        useMaterialInForm(item) {
+          this.modul.mataPelajaran = item.subject;
+          this.modul.materi = item.title;
+          if (item.description) {
+            this.modul.materiPembelajaran = item.description;
+          }
+          if (item.profilLulusan) {
+            this.modul.profilLulusan = item.profilLulusan;
+          }
+          if (item.pancaCinta) {
+            this.modul.pancaCinta = item.pancaCinta;
+          }
+          this.activeTab = 'form';
+          if (!this.inputMode) this.inputMode = 'manual';
+          alert(`✨ Materi "${item.title}" beserta uraian profil & Panca Cinta relevan diterapkan.`);
+        },
+        uploadLogo(e) {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (evt) => { this.settings.logoUrl = evt.target.result; };
+            reader.readAsDataURL(file);
+          }
+        },
+        formatValueToString(val) {
+          if (val === null || val === undefined) return '';
+          if (typeof val === 'string') return val;
+          if (Array.isArray(val)) {
+            return val.map((item, idx) => {
+              if (typeof item === 'object') return this.formatValueToString(item);
+              return `${idx + 1}. ${item}`;
+            }).join('\n');
+          }
+          if (typeof val === 'object') {
+            return Object.entries(val)
+              .map(([k, v]) => `• ${k.toUpperCase()}:\n${this.formatValueToString(v)}`)
+              .join('\n\n');
+          }
+          return String(val);
+        },
+        async generateModulWithAI() {
+          const key = this.settings.apiKey ? this.settings.apiKey.trim() : '';
+          if (!key) {
+            alert('Harap masukkan API Key di tab Pengaturan terlebih dahulu!');
+            this.activeTab = 'settings';
+            return;
+          }
+
+          this.isLoading = true;
+
+          const isGoogleKey = key.startsWith('AIza') || this.settings.provider === 'gemini';
+
+          const promptText = `Anda adalah seorang pakar pengembang kurikulum Madrasah Ibtidaiyah (MI) dan konsultan utama Kurikulum Berbasis Cinta (KBC).
+
+TUGAS:
+Buatkan rincian modul ajar yang PADAT, JELAS, NARATIF, dan PEDAGOGIS untuk:
+- Mata Pelajaran: ${this.modul.mataPelajaran}
+- Materi Pokok: ${this.modul.materi}
+- Fase/Kelas: ${this.modul.faseKelas}
+- Alokasi Waktu Total: ${this.modul.alokasiWaktu}
+
+ATURAN KHUSUS & KRITIS (PANCA CINTA & PROFIL LULUSAN):
+1. Pilih HANYA 1 (satu) topik Panca Cinta yang PALING RELEVAN dengan materi pokok di atas (pilih dari: Cinta Allah & Rasul / Cinta Diri & Sesama Manusia / Cinta Ilmu & Kebenaran / Cinta Lingkungan & Alam / Cinta Tanah Air & Bangsa). Uraikan secara naratif mendalam dan detail kaitannya dengan materi tersebut.
+2. Uraikan Dimensi Profil Lulusan secara spesifik dan sangat relevan dengan substansi materi.
+3. Bagikan alokasi waktu total secara proporsional dan eksplisit (tuliskan estimasi durasi menitnya pada setiap awal poin kegiatan) untuk Kegiatan Awal, Kegiatan Inti, Mengaplikasi, Merefleksi, dan Kegiatan Penutup.
+4. Wajib membalas HANYA dengan objek JSON murni tanpa markdown berlebih.
+5. DILARANG menggunakan objek bertingkat atau array pada nilai JSON. Setiap nilai KUNCI HARUS BERUPA TEKS (STRING BIASA). Gunakan baris baru (\\n) untuk pemisah poin.
+6. DILARANG menggunakan tag <think> atau teks pendahuluan/penutup.
+
+Kunci JSON yang wajib diisi (semua bernilai teks/string):
+{
+  "kesiapanMurid": "Uraian naratif kondisi kognitif dan emosional murid",
+  "materiPembelajaran": "Uraian rincian materi pelajaran yang runtut, terstruktur, dan mendalam dalam bentuk poin-poin bernomor",
+  "profilLulusan": "Uraian naratif mendalam dan detail dimensi profil lulusan yang secara khusus relevan dengan materi",
+  "pancaCinta": "Uraian naratif mendalam dan detail HANYA 1 topik Panca Cinta yang paling relevan dengan materi",
+  "integrasiKBC": "Penjelasan integrasi nilai kasih sayang dan empati",
+  "cp": "Capaian pembelajaran lengkap",
+  "lintasDisiplin": "Keterkaitan dengan mata pelajaran lain",
+  "tp": "Tujuan pembelajaran berurutan (1. ... \\n2. ...)",
+  "praktekPedagogik": "Metode pembelajaran interaktif",
+  "kemitraan": "Bentuk kerja sama murid dan orang tua",
+  "lingkungan": "Kondisi fisik dan psikis kelas berbasis cinta",
+  "digital": "Pemanfaatan media digital",
+  "kegiatanAwal": "Langkah terstruktur orientasi, doa, dan apersepsi dengan alokasi waktu menit proporsional",
+  "kegiatanInti": "Aktivitas eksplorasi, diskusi, dan aplikasi dengan alokasi waktu menit proporsional",
+  "mengaplikasi": "Aksi nyata penerapan nilai kebaikan dengan alokasi waktu menit proporsional",
+  "merefleksi": "Pertanyaan perenungan makna belajar dengan alokasi waktu menit proporsional",
+  "kegiatanPenutup": "Apresiasi, rangkuman, dan doa penutup dengan alokasi waktu menit proporsional",
+  "asesmen": "Rincian Asesmen Sikap, Pengetahuan, dan Kinerja lengkap",
+  "lkpd": "Instruksi LKPD lengkap dengan pertanyaan reflektif dan aksi cinta"
+}`;
+
+          try {
+            let jsonResultText = '';
+
+            if (isGoogleKey) {
+              const geminiModels = ['gemini-2.5-flash', 'gemini-2.0-flash'];
+              let geminiSuccess = false;
+              let lastGeminiErr = null;
+
+              for (const modelName of geminiModels) {
+                try {
+                  console.log(`Mencoba Google Gemini Model: ${modelName}...`);
+                  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${key}`;
+                  
+                  const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      contents: [{ parts: [{ text: promptText }] }],
+                      generationConfig: { 
+                        responseMimeType: "application/json",
+                        temperature: 0.7
+                      }
+                    })
+                  });
+
+                  const data = await res.json();
+
+                  if (res.status === 429) {
+                    throw new Error(`Rate Limit Exceeded (429) pada model ${modelName}.`);
+                  }
+
+                  if (!res.ok || data.error) {
+                    throw new Error(data.error?.message || `Google API Error ${res.status}`);
+                  }
+
+                  jsonResultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                  if (jsonResultText) {
+                    geminiSuccess = true;
+                    break;
+                  }
+                } catch (err) {
+                  console.warn(`Gagal pada ${modelName}:`, err.message);
+                  lastGeminiErr = err;
+                }
+              }
+
+              if (!geminiSuccess) {
+                if (lastGeminiErr?.message?.includes('429') || lastGeminiErr?.message?.includes('Rate Limit')) {
+                  throw new Error('⏱️ Batas Kuota Gratisan (Rate Limit) Google AI Studio Tercapai.\n\nSilakan tunggu 30-60 detik lalu klik tombol Generate lagi, atau buat API Key baru di aistudio.google.com/app/apikey');
+                }
+                throw new Error(lastGeminiErr?.message || 'Gagal menghubungkan ke Google Gemini API.');
+              }
+
+            } else {
+              console.log('Menghubungkan ke OpenRouter API...');
+              const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                  'Authorization': `Bearer ${key}`,
+                  'HTTP-Referer': 'http://localhost',
+                  'X-Title': 'Modul Ajar KBC MI',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  model: this.settings.aiModel,
+                  messages: [{ role: 'user', content: promptText }]
+                })
+              });
+
+              const data = await res.json();
+              if (res.status === 429) {
+                throw new Error('⏱️ OpenRouter Rate Limit. Harap tunggu 1 menit sebelum mencoba lagi.');
+              }
+              if (!res.ok || data.error) {
+                throw new Error(data.error?.message || `OpenRouter HTTP Status ${res.status}`);
+              }
+
+              jsonResultText = data.choices?.[0]?.message?.content;
+            }
+
+            if (!jsonResultText) throw new Error('Respon dari server AI kosong.');
+
+            jsonResultText = jsonResultText.replace(/<think>[\s\S]*?<\/think>/gi, '');
+            jsonResultText = jsonResultText.replace(/```json/gi, '').replace(/```/g, '').trim();
+
+            const jsonStart = jsonResultText.indexOf('{');
+            const jsonEnd = jsonResultText.lastIndexOf('}');
+            if (jsonStart === -1 || jsonEnd === -1) throw new Error('Format balasan AI tidak berbentuk objek JSON.');
+
+            const cleanJson = jsonResultText.substring(jsonStart, jsonEnd + 1);
+            const parsed = JSON.parse(cleanJson);
+
+            for (const k in parsed) {
+              if (parsed.hasOwnProperty(k)) {
+                this.modul[k] = this.formatValueToString(parsed[k]);
+              }
+            }
+
+            alert('✨ Modul Ajar KBC beserta Panca Cinta relevan berhasil disusun AI!');
+
+          } catch (err) {
+            console.error('AI Generation Error:', err);
+            alert(`⚠️ Gagal menyusun modul:\n${err.message}`);
+          } finally {
+            this.isLoading = false;
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>
+    
